@@ -34,6 +34,11 @@ public class PlayerController : MonoBehaviour
             touchXDelta = Input.GetAxis("Mouse X");
         }
 
+        else
+        {
+            touchXDelta = 0;
+        }
+
         newX = transform.position.x + xSpeed * touchXDelta * Time.deltaTime;
         newX = Mathf.Clamp(newX, -limitX, limitX);
 
