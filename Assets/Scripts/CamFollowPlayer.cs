@@ -16,15 +16,4 @@ public class CamFollowPlayer : MonoBehaviour
         transform.position = sPos;
         transform.LookAt(lookTarget.position);
     }
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
