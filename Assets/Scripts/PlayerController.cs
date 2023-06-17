@@ -8,12 +8,14 @@ public class PlayerController : MonoBehaviour
     public float runningSpeed;
     float touchXDelta = 0;
     float newX = 0;
+    float newYRotate = -180.0f;
     public float xSpeed;
     public float limitX;
+    public GameObject Player;
 
     void Start()
     {
-        
+        Player.transform.Rotate(0.0f, newYRotate, 0.0f);
     }
 
     // Update is called once per frame
