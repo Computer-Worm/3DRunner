@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,12 +16,20 @@ public class PlayerController : MonoBehaviour
     public float limitX;
     public GameObject Player;
 
+    bool kontrol = false;
+    Button btn;
+    public Button StartButton;
+    public Button QuitButton;
+    public GameObject GameName;
+    public GameObject Score;
+
     void Start()
     {
+        btn = StartButton.GetComponent<Button>();
+        btn.onClick.AddListener(StartBtn);
         Player.transform.Rotate(0.0f, newYRotate, 0.0f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         SwipeCheck();
@@ -26,25 +37,44 @@ public class PlayerController : MonoBehaviour
 
     private void SwipeCheck()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        if (kontrol == true)
         {
-            touchXDelta = Input.GetTouch(0).deltaPosition.x / Screen.width;
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                touchXDelta = Input.GetTouch(0).deltaPosition.x / Screen.width;
+            }
+
+            else if (Input.GetMouseButton(0))
+            {
+                touchXDelta = Input.GetAxis("Mouse X");
+            }
+
+            else
+            {
+                touchXDelta = 0;
+            }
+
+            newX = transform.position.x + xSpeed * touchXDelta * Time.deltaTime;
+            newX = Mathf.Clamp(newX, -limitX, limitX);
+
+            Vector3 newPosition = new Vector3(newX, transform.position.y, transform.position.z + runningSpeed * Time.deltaTime);
+            transform.position = newPosition;
         }
+        
+    }
 
-        else if (Input.GetMouseButton(0))
-        {
-            touchXDelta = Input.GetAxis("Mouse X");
-        }
+    public void StartBtn()
+    {
+        kontrol = true;
+        StartButton.gameObject.SetActive(false);
+        QuitButton.gameObject.SetActive(false);
+        GameName.gameObject.SetActive(false);
+        Score.gameObject.SetActive(true);
+    }
 
-        else
-        {
-            touchXDelta = 0;
-        }
-
-        newX = transform.position.x + xSpeed * touchXDelta * Time.deltaTime;
-        newX = Mathf.Clamp(newX, -limitX, limitX);
-
-        Vector3 newPosition = new Vector3(newX, transform.position.y, transform.position.z + runningSpeed * Time.deltaTime);
-        transform.position = newPosition;
+    public void QuitBtn()
+    {
+        Debug.Log("Oyundan Çýkýlýyor..");
+        Application.Quit();
     }
 }
